@@ -6,6 +6,11 @@ class Formacion {
 	var property locomotora
 	var property vagones 
 	
+
+	method vagonMasPesado(){
+		return vagones.max{elem => elem.pesoMaximo() }
+	}
+	
 	method engancharVagon(vagon){
 		vagones.add(vagon)
 	}
@@ -18,15 +23,32 @@ class Formacion {
 		 return vagones.sum{ elem => elem.pesoMaximo() }
 	}
 	
+	method pesoTotalLocomotora(){
+		 return locomotora.sum{ elem => elem.pesoMaximo() }
+	}
+	
+	method pesoDeCargaLocomotora(){
+		 return locomotora.sum{ elem => elem.cargaMaximaActual() }
+	}
+	
+	method formacionEficiente(){
+		return vagones.all{ elem => elem.pesoMaximo() > self.pesoTotalLocomotora()  }
+	}
+	
 	method vagonesLivianos(){
-		 return vagones.filter{ vagon => vagon.pesoMaximo() > 2500 }
+		 return vagones.filter{ elem => elem.pesoMaximo() > 2500 }.size()
 	}
 	
 	method puedeMoverse(){
-		 return vagones.all{ elem => elem.pesoMaximo() <= self.pesoTotal() }
-	}
+		return  self.pesoTotal() < self.pesoDeCargaLocomotora() }
 	
+	method cuantoKgFaltaParaElArrastre(){
+		if( self.pesoDeCargaLocomotora() - self.pesoTotal() > 0 ) return 0
+		else return self.pesoDeCargaLocomotora() - self.pesoTotal()
+		
 	}
+
+}
 
 
 class VagonDePasajeros{
@@ -62,6 +84,10 @@ class VagonDeCarga{
 		return cargaMaxima + 160
 	} 
 
+	method cantidadDePasajerosATransportar(){
+	 return 0
+	}
+
 	}
 	
 class Locomotora {
@@ -70,9 +96,23 @@ class Locomotora {
 	var property pesoMaximoDeArrastre
 	var property velocidadMaxima
 
+	method cargaMaximaActual(){
+		return pesoMaximoDeArrastre - peso
+	}
 	
-	
+	method pesoMaximo(){
+		return peso
+	}
 	
  }
 	
+class Deposito{
 	
+	var property formaciones
+	
+	
+	method vagonesPesados(){
+		return  formaciones.map{ elem => elem.vagonMasPesado()}
+		}
+	}
+
