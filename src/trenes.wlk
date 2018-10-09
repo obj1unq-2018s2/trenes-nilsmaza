@@ -1,13 +1,30 @@
 
 
 
-class Locomotora {
+class Formacion {
 	
-	var property peso
-	var property pesoMaximoDeArrastre
-	var property velocidadMaxima
+	var property locomotora
+	var property vagones 
 	
+	method engancharVagon(vagon){
+		vagones.add(vagon)
+	}
 	
+	method desengacharrVagon(vagon){
+		vagones.remove(vagon)
+	}
+	
+	method pesoTotal(){
+		 return vagones.sum{ elem => elem.pesoMaximo() }
+	}
+	
+	method vagonesLivianos(){
+		 return vagones.filter{ vagon => vagon.pesoMaximo() > 2500 }
+	}
+	
+	method puedeMoverse(){
+		 return vagones.all{ elem => elem.pesoMaximo() <= self.pesoTotal() }
+	}
 	
 	}
 
@@ -19,7 +36,7 @@ class VagonDePasajeros{
 	var cantidadDePasajerosMaximo = 0
 	
 	method cantidadDePasajerosATransportar(){
-		if(ancho < 2.5 )  cantidadDePasajerosMaximo = largo * 8
+		if(ancho < 2.5 ) cantidadDePasajerosMaximo = largo * 8
 		else cantidadDePasajerosMaximo = largo * 8	
 	}
 	
@@ -32,7 +49,7 @@ class VagonDePasajeros{
 	}
 	
 	method pesoMaximo(){
-		return cantidadDePasajerosMaximo * 80
+		 return  cantidadDePasajerosMaximo * 80
 	} 
 }
 
@@ -47,6 +64,15 @@ class VagonDeCarga{
 
 	}
 	
+class Locomotora {
 	
+	var property peso
+	var property pesoMaximoDeArrastre
+	var property velocidadMaxima
+
+	
+	
+	
+ }
 	
 	

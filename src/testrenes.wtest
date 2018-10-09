@@ -1,0 +1,26 @@
+import trenes.*
+
+describe "trenes" {
+
+
+
+	test "formacion 1" {
+		 
+		 var vagon1 = new VagonDePasajeros(largo = 4 , ancho = 2)
+		 var vagon2 = new VagonDePasajeros(largo = 4 , ancho = 2.5)
+		 var vagon3 = new VagonDePasajeros(largo = 4 , ancho = 3)
+		 var vagon4 = new VagonDePasajeros(largo = 4 , ancho = 3.5)
+		 var vagon5 = new VagonDeCarga(cargaMaxima = 1000 )
+		 var locomotora1 = new Locomotora()
+	vagon1.cantidadDePasajerosATransportar()
+	vagon2.cantidadDePasajerosATransportar()
+	vagon3.cantidadDePasajerosATransportar()
+	vagon4.cantidadDePasajerosATransportar()
+	vagon5.cantidadDePasajerosATransportar()
+ 	
+ 	var tren1 = new  Formacion (locomotora = locomotora1 , vagones = [vagon1,vagon2,vagon3,vagon4,vagon5]) 
+
+	
+}
+
+}
