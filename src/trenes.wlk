@@ -1,6 +1,3 @@
-
-
-
 class Formacion {
 	
 	var property locomotora
@@ -44,7 +41,7 @@ class Formacion {
 	}
 	
 	method vagonesLivianos(){
-		 return vagones.filter{ elem => elem.pesoMaximo() > 2500 }.size()
+		 return vagones.filter{ elem => elem.pesoMaximo() < 2500 }.size()
 	}
 	
 	method puedeMoverse(){
@@ -183,8 +180,6 @@ class Deposito{
 		}
 	}
 	
-	
-	
 	method vagonesPesados(){
 		return  formaciones.map{ elem => elem.vagonMasPesado()}
 		}
@@ -193,17 +188,35 @@ class Deposito{
 
 class LargaDistancia inherits Formacion {
 	
+
+	method formacionBienArmada(){
+		return self.baniosDeLAFormacion() > self.cantidadDePasajeros() / 50
+		 and self.puedeMoverse()
+	}
+	
+//	method velocidadLimite(){
+//		if(unionDeCiudadesGrades){
+//		 velocidadLimite = 200.min(self.cantidadDeVelocidadMaxima() )}
+//	else  velocidadLimite = 150.min(self.cantidadDeVelocidadMaxima() )
+//		return velocidadLimite
+//		}
+		
+//	method esTrenDeMaximaVelocidad(){
+//		return self.cantidadDeVelocidadMaxima() > 250 and
+//				self.vagonesLivianos() == self.cantidadDeVagones()
+//	}
+	
+	}
+
+class TrenDeMaximaVelocidad inherits LargaDistancia{
+	
 	var unionDeCiudadesGrades = false
 	var velocidadLimite = 0
-	
+
 	method permitirEntradaACiudades(){
 		unionDeCiudadesGrades = true
 	}
-	
-	method formacionBienArmada(){
-		return self.baniosDeLAFormacion() > self.cantidadDePasajeros() / 50
-	}
-	
+
 	method velocidadLimite(){
 		if(unionDeCiudadesGrades){
 		 velocidadLimite = 200.min(self.cantidadDeVelocidadMaxima() )}
@@ -216,14 +229,13 @@ class LargaDistancia inherits Formacion {
 				self.vagonesLivianos() == self.cantidadDeVagones()
 	}
 	
-	}
-	
+}
 	
 
 class CortaDistancia inherits Formacion{
 	
 	method formacionBienArmada(){
-		return self.esCompleja()
+		return  not self.esCompleja() and self.puedeMoverse()
 		}
 		
 	method velocidadLimite(){
