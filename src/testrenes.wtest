@@ -14,6 +14,8 @@ describe "trenes" {
 	 var vagon6 = new VagonDeCarga(cargaMaxima = 12000 )					//  pesomaximo 12160
 	 var vagon7 = new VagonDePasajeros(largo = 4 , ancho = 3.5, banios = 0) //  pesomaximo 3200
 	 var vagon8 = new VagonDeCarga(cargaMaxima = 10 )						//  pesomaximo 170
+	 var vagon1Liviano = new VagonDePasajeros(largo = 4 , ancho = 1.5, banios = 1) 	// 	pesomaximo 
+	 var vagon2Liviano = new VagonDePasajeros(largo = 4 , ancho = 1.5, banios = 2) //  pesomaximo 
 	 	 
 	 var locomotora1 = new Locomotora(peso = 1200 , pesoMaximoDeArrastre = 20000, velocidadMaxima = 90  )
 	 var locomotora2 = new Locomotora(peso = 1200 , pesoMaximoDeArrastre = 15000, velocidadMaxima = 90  )
@@ -40,9 +42,9 @@ describe "trenes" {
 	var tren1Larga = new  LargaDistancia (locomotora = [locomotora6] , vagones = [vagon1,vagon2,vagon3,vagon5]) 
 	var tren2Corta = new  CortaDistancia (locomotora = [locomotora8] , vagones = [vagon8,vagon8,vagon8,vagon8])
 	
-	var tren2Larga = new LargaDistancia (locomotora = [locomotora3,locomotora4] , vagones = [vagon1,vagon2,vagon3,vagon4])
-	var tren3Larga = new LargaDistancia (locomotora = [locomotora3,locomotora4] , vagones = [vagon1,vagon2,vagon3,vagon4])
-	var tren4Larga = new LargaDistancia (locomotora = [locomotora3] , vagones = [vagon1,vagon2,vagon3,vagon4,vagon5])
+	var tren2Larga = new TrenDeMaximaVelocidad (locomotora = [locomotora3,locomotora4] , vagones = [vagon1,vagon2,vagon3,vagon4])
+	var tren3Larga = new TrenDeMaximaVelocidad (locomotora = [locomotora3,locomotora4] , vagones = [vagon1Liviano,vagon2Liviano,vagon1Liviano,vagon2Liviano])
+	var tren4Larga = new TrenDeMaximaVelocidad (locomotora = [locomotora3] , vagones = [vagon1,vagon2,vagon3,vagon4,vagon5])
 	
 	var locomotorasSinUsar = [locomotora3,locomotora2] 
 	
@@ -67,26 +69,28 @@ describe "trenes" {
 	assert.equals(10880,tren3.cuantoKgFaltaParaElArrastre())
 	depositoB.agregarFormacionEnDeposito()
 	assert.equals(0,tren3.cuantoKgFaltaParaElArrastre())
-	assert.equals([],depositoB.listaDeFormacionesQueNecesitanAyuda()) 
+	assert.equals([],depositoB.listaDeFormacionesQueNecesitanAyuda())
 	
 	// 9
 	assert.equals(4,tren1Larga.baniosDeLAFormacion())
-	assert.equals(4,tren3Larga.baniosDeLAFormacion())
+	assert.equals(6,tren3Larga.baniosDeLAFormacion())
 	assert.that(tren1Larga.formacionBienArmada())
-	assert.equals(false,tren2Corta.esCompleja())
+	assert.notThat(tren2Corta.esCompleja())
+	assert.notThat(tren3Larga.esCompleja())
 	assert.that(tren2Corta.formacionBienArmada())
-	assert.equals(false,tren3Larga.formacionBienArmada())
+	assert.that(tren3Larga.formacionBienArmada())
 	
 	// 10
 	assert.equals(60,tren2Corta.velocidadLimite())
-	assert.equals(150,tren1Larga.velocidadLimite())
-	tren1Larga.permitirEntradaACiudades()
-	assert.equals(200,tren1Larga.velocidadLimite())
+	assert.equals(150,tren3Larga.velocidadLimite())
+	assert.equals(150,tren4Larga.velocidadLimite())
+	tren4Larga.permitirEntradaACiudades(true)
+	assert.equals(200,tren4Larga.velocidadLimite())
 	
 	//11
-	assert.notThat(tren2Larga.esTrenDeMaximaVelocidad())  // no son trenes livianos.
-	assert.equals(false,tren3Larga.esTrenDeMaximaVelocidad())
-	assert.equals(false,tren4Larga.esTrenDeMaximaVelocidad())
+	assert.notThat(tren2Larga.esTrenDeMaximaVelocidad()) 	// no es tren livianos.
+	assert.that(tren3Larga.esTrenDeMaximaVelocidad())		// es tren livianos.
+	assert.notThat(tren4Larga.esTrenDeMaximaVelocidad()) 	// no es tren livianos.
 	
  }
 }
